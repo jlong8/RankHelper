@@ -28,10 +28,9 @@ class rankHelperDb:
 		rankSet = set()
 		for rank in ranksLines:
 			rank = rank.rstrip().split(",")
-			for net in rank:
-				self.rankBuddies[net].update(rank)
-				rankSet.add(net)
-			ranks.add(rankSet)
+			rank = [ int(stringNum) for stringNum in rank ]
+			self.addRankToRanks(rank)
+			self.addRankToRankBuddies(rank)
 
 	def getNetId(self, name):
 		name = name.lower()
@@ -41,7 +40,6 @@ class rankHelperDb:
 			net = self.nets[i]
 			if name in net:
 				index = i
-
 		return index
 
 	def checkValidName(self, name):
@@ -80,6 +78,23 @@ class rankHelperDb:
 	def addRankToRankBuddies(self, rankInNums):
 		for netId in rankInNums:
 			self.rankBuddies[netId].update(rankInNums)
+
+	def writeRanksToFile(self, ranksFilename):
+		ranksFile = open(ranksFilename, 'w') #Currently overwrites the entire file each time
+		for rank in self.ranks:
+			rankString = ','.join(map(str, rank))  #Make into a comma-separated string
+			ranksFile.write(rankString + "\n")
+		ranksFile.close()
+
+	def printRanks(self):
+		for rank in self.ranks:
+			rankString = ','.join(map(str, rank))
+			print rankString
+
+	def printNets(self):
+		for net in self.nets:
+			netString = ", ".join(map(str, net))
+			print netString
 
 if __name__ == '__main__':
 	db = rankHelperDb()
