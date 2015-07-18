@@ -16,7 +16,7 @@ def checkValidName(args):
 
 def newRank(args):
 	if len(args) < 1:
-		print "No arguments provided. Usage: newRank <name1> <name2> <name3> <name4>"
+		print "No arguments provided. Usage: newRank <name1>,<name2>,<name3>,<name4>"
 	else:
 		for net in args:
 			if not db.checkValidName(net):
@@ -34,10 +34,20 @@ def printSummary():
 	print "Nets:"
 	db.printNets()
 
+def checkRank(args):
+	if len(args) <= 1:
+		print "Invalid arguments. Usage: check <name1>,<name2>,<name3>,<name4>"
+	else:
+		for net in args:
+			if not db.checkValidName(net):
+				print "Error: Invalid name " + net
+				return
+		print db.checkRank(args)
+
 
 if __name__ == "__main__":
 
-	#Prepare folders
+	#Prepare files
 	os.system('touch ' + netFile)
 	os.system('touch ' + rankFile)
 
@@ -54,6 +64,8 @@ if __name__ == "__main__":
 		command = line[0]
 		args = " ".join(line[1:])
 		args = args.split(",")
+		for arg in args:
+			arg = arg.strip()
 
 		if command == "q" or command == "Q" or command == "quit":
 			print "Saving..."
@@ -67,5 +79,7 @@ if __name__ == "__main__":
 			save()
 		elif command == 'summary':
 			printSummary()
+		elif command == 'check':
+			checkRank(args)
 		else:
 			print "Command " + command + " not found."

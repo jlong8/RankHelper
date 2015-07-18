@@ -96,6 +96,14 @@ class rankHelperDb:
 			netString = ", ".join(map(str, net))
 			print netString
 
+	def checkRank(self, potentialRank):
+		potentialRankInNums = self.convertRankToNums(potentialRank)
+		for net1 in potentialRankInNums:
+			for net2 in potentialRankInNums:
+				if net1 != net2 and net2 in self.rankBuddies[net1]:
+					return False
+		return True
+
 if __name__ == '__main__':
 	db = rankHelperDb()
 	db.loadNets("netFile.csv")
